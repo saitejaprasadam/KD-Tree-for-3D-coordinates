@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import KDTree.KDTree;
 import KDTree.Point3D;
@@ -31,25 +32,39 @@ public class Runner {
 		
 		try {
 			
-			KDTree KDTreeObject = new KDTree();
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(fileName)));
+			ArrayList<Point3D> coordinates = new ArrayList<Point3D>(); 
 			
+			System.out.println("Reading Data");
 			String line = null;		
 			while((line = bufferedReader.readLine()) != null) {
 				line = line.trim().replace("(", "").replace(")", "");
 				
-				String[] coordinates = line.split(",");
+				String[] temp = line.split(",");
 				
-				float x = Float.parseFloat(coordinates[0].trim());
-				float y = Float.parseFloat(coordinates[1].trim());
-				float z = Float.parseFloat(coordinates[2].trim());
+				float x = Float.parseFloat(temp[0].trim());
+				float y = Float.parseFloat(temp[1].trim());
+				float z = Float.parseFloat(temp[2].trim());
 				
 				Point3D point = new Point3D(x, y, z);
-				KDTreeObject.insert(point);
-								
+				coordinates.add(point);
+				
+				//if(coordinates.size() > 500)
+				//	break;
 			}
+		
+			System.out.println("Building KD Tree");
+			KDTree KDTreeObject = new KDTree(coordinates);
+			KDTreeObject.build();
+			System.out.println("Size of KD Tree: " + KDTreeObject.getSize());
 			
-			System.out.println(KDTreeObject.getSize());
+			Point3D temp = new Point3D(0f, 0f, 0f);
+			Point3D temp2 = new Point3D(1000f, 1000f, 1000f);
+			
+			System.out.println("\nRange Searching between for " + temp + " <==> " + temp2);
+			KDTreeObject.rangeQuery(KDTreeObject.rootNode, temp, temp2);
+			System.out.println(KDTreeObject.range_coordiantes.size());
+			
 			bufferedReader.close();			
 			
 		} catch (IOException e) {

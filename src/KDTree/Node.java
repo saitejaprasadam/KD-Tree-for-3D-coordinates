@@ -1,19 +1,20 @@
 package KDTree;
 
-public class Node {
+import java.util.List;
 
-	private Point3D coordinates;
+public class Node{
+	
+	Point3D point;
+	List<Point3D> leftList = null;
+	List<Point3D> rightList = null;
+	Node leftNode, rightNode;
 	private int level;
 	
-	Node leftNode, rightNode;
-	
-	public Node(Point3D coordinates, int level) {
-		this.coordinates = coordinates;
+	public Node(Point3D point, int level, List<Point3D> leftList, List<Point3D> rightList){
+		this.point  = point;
 		this.level = level;
-	}
-	
-	public Point3D getCoordinates() {
-		return coordinates;
+		this.rightList = rightList;
+		this.leftList = leftList;
 	}
 	
 	public int getLevel() {
@@ -21,17 +22,25 @@ public class Node {
 	}
 	
 	public int getAxis() {
-		return Math.abs(level - getNearestWholeMultiple(level)); 
+		return level % 3;
 	}
 	
-	static int getNearestWholeMultiple(int input) {
-		
-		int output = Math.round(input / 3);
-	    if (output == 0 && input > 0) 
-	    	output += 1;
-	      
-	    output *= 3;
-	    return output;   
-    }
+	public void clearList() {
+		leftList.clear();
+		leftList = null;
+		rightList.clear();
+		rightList = null;
+	}
+	
+	public boolean checkIfRange(Point3D lowerRange, Point3D upperRange) {
+	
+		if(lowerRange.x <= point.x && point.x <= upperRange.x && 
+				lowerRange.y <= point.y && point.y <= upperRange.y && 
+				lowerRange.z <= point.z && point.z <= upperRange.z) {
+			return true;
+		}
+	
+		return false;
+	}
 	
 }
