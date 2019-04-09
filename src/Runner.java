@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import KDTree.KDTree;
 import KDTree.Point3D;
@@ -32,6 +33,10 @@ public class Runner {
 		
 		try {
 			
+			Point3D lowerBound = new Point3D(357.3839f, 512.5141f, 626.4071f);
+			Point3D upperBound = new Point3D(857.3839f, 612.5141f, 638.4071f);
+			Point3D nearestTo = new Point3D(0.993822f, 4.021896f, 2.58316f);
+			
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(fileName)));
 			ArrayList<Point3D> coordinates = new ArrayList<Point3D>(); 
 			
@@ -48,22 +53,27 @@ public class Runner {
 				
 				Point3D point = new Point3D(x, y, z);
 				coordinates.add(point);
-				
-				//if(coordinates.size() > 500)
-				//	break;
+			
 			}
 		
-			System.out.println("Building KD Tree");
 			KDTree KDTreeObject = new KDTree(coordinates);
 			KDTreeObject.build();
-			System.out.println("Size of KD Tree: " + KDTreeObject.getSize());
 			
-			Point3D temp = new Point3D(0f, 0f, 0f);
-			Point3D temp2 = new Point3D(1000f, 1000f, 1000f);
+			System.out.println("\nRange Searching between for " + lowerBound + " <==> " + upperBound);
+			KDTreeObject.rangeQuery(KDTreeObject.rootNode, lowerBound, upperBound, 0);			
+			System.out.println("Found " + KDTreeObject.range_coordiantes.size() + " in range");
 			
-			System.out.println("\nRange Searching between for " + temp + " <==> " + temp2);
-			KDTreeObject.rangeQuery(KDTreeObject.rootNode, temp, temp2);
-			System.out.println(KDTreeObject.range_coordiantes.size());
+			System.out.print("Do you want to see them (Y/N): ");
+			Scanner scanner = new Scanner(System.in);
+			String input = scanner.nextLine();
+			scanner.close();
+			
+			if(input.equalsIgnoreCase("Y"))
+				for (Point3D range_points : KDTreeObject.range_coordiantes) 
+					System.out.println(range_points);
+			
+			System.out.println("\nLooking for nearest neighbor of " + nearestTo);
+			System.out.println(KDTreeObject.nearestNeighbor(KDTreeObject.rootNode, nearestTo, null).getValue());
 			
 			bufferedReader.close();			
 			

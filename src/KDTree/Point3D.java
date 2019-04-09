@@ -26,6 +26,10 @@ public class Point3D {
 		return "(" + String.valueOf(x) + ", " + String.valueOf(y) + ", " + String.valueOf(z) + ")";
 	}
 	
+	public double ssd(Point3D point) {
+		return Math.sqrt(Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2) + Math.pow(point.z - z, 2));
+	}
+	
 	public static class SortbyX implements Comparator<Point3D> { 
 
 	    public int compare(Point3D a, Point3D b) { 

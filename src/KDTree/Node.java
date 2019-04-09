@@ -5,8 +5,8 @@ import java.util.List;
 public class Node{
 	
 	Point3D point;
-	List<Point3D> leftList = null;
-	List<Point3D> rightList = null;
+	volatile List<Point3D> leftList = null;
+	volatile List<Point3D> rightList = null;
 	Node leftNode, rightNode;
 	private int level;
 	
@@ -26,9 +26,7 @@ public class Node{
 	}
 	
 	public void clearList() {
-		leftList.clear();
 		leftList = null;
-		rightList.clear();
 		rightList = null;
 	}
 	
