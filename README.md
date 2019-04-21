@@ -1,1 +1,1 @@
-# COMP-6521-Effective-Indexing-Structure
+# COMP 6521 - Effective Indexing Structure
